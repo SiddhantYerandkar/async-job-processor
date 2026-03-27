@@ -1,20 +1,22 @@
 const { Worker } = require("bullmq");
 const connection = require("../config/redis");
 const { sendEmail } = require("../services/email.service");
+const logger = require("../utils/logger");
 
 const worker = new Worker(
     "emailQueue",
     async (job) => {
         console.log("Processing job:", job.id);
-        await sendEmail(job.data);
+        const result = await sendEmail(job.data);
+        return result;
     },
-    { connection }
+    { connection, concurrency: 5 }
 );
 
 worker.on("completed", (job) => {
-    console.log(`Job ${job.id} completed`);
+    logger.info(`Job ${job.id} completed`);
 });
 
 worker.on("failed", (job, err) => {
-    console.error(`Job ${job.id} failed:`, err.message);
+    logger.error(`Job ${job.id} failed:`, err.message);
 });

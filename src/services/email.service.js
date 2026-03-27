@@ -1,10 +1,12 @@
+const logger = require("../utils/logger");
+
 const sendEmail = async (data) => {
-    console.log("Sending email to:", data.email);
+    logger.info("Sending email to:", data.email);
 
     // simulate delay
     await new Promise((res) => setTimeout(res, 2000));
 
-    console.log("Email sent!");
+    return "Email sent  successfully";
 };
 
 module.exports = { sendEmail };

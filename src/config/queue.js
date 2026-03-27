@@ -3,4 +3,6 @@ const connection = require("./redis");
 
 const emailQueue = new Queue("emailQueue", { connection });
 
-module.exports = { emailQueue };
+const reportQueue = new Queue("reportQueue", { connection });
+
+module.exports = { emailQueue, reportQueue };
